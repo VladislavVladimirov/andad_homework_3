@@ -29,4 +29,6 @@
     <string name="sign_in">Вход</string>
     <string name="sign_up">Регистрация</string>
     <string name="sign_out">Выход</string>
+    <string name="advertisement">Реклама</string>
+    <string name="retry">Повторить</string>
 </resources>
