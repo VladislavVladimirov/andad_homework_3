@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.core.net.toFile
 import androidx.lifecycle.*
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import androidx.paging.map
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -38,10 +39,13 @@ class PostViewModel @Inject constructor(
     private val repository: PostRepository,
     auth: AppAuth,
 ) : ViewModel() {
+    private val cached = repository
+        .data
+        .cachedIn(viewModelScope)
 
     val data: Flow<PagingData<FeedItem>> = auth.authStateFlow
         .flatMapLatest { (myId, _) ->
-            repository.data.map { pagingData ->
+            cached.map { pagingData ->
                 pagingData.map { post ->
                     if (post is Post) {
                         post.copy(ownedByMe = post.authorId == myId)
